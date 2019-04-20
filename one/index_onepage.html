@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<html>
+<head>
+    <title>Books App</title>
+  
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+</head>
+<body>
+<div class="container" id="app">
+
+    
+    <router-view></router-view>
+
+</div>
+   
+
+ 
+<template id="book-list-template">
+    
+
+
+    <div class="book-list" v-show="books">
+        <h1>图书列表</h1>
+        <br>
+
+        <div class="filter">
+           书名检索： <input type="text" class="form-controll" v-model="titleFilter"><br>
+
+           分类检索： <select v-model="typeFilter"  class="form-controll">
+               <option value="">全部</option>
+               <option v-for="type in types" value="{{type.tid[0].value}}">{{type.name[0].value}}</option>
+           </select>
+
+        </div>
+
+        <div v-for="book in books | filterBy titleFilter in 'title' |  filterBy typeFilter in 'field_fenlei[0].target_id' " >
+
+            <div class="bk_img">
+                    <img v-bind:src="book.field_fengmian[0].url" alt="{{ book.field_fengmian[0].alt }}">
+            </div>
+            <div class="bk_desc">
+                <h4><a v-link="{ name: 'book', params:{bookId:book.nid[0].value}}">{{ book.title[0].value }}</a></h4>
+               
+    
+                <strong>作  者:</strong>
+                <span >
+                    {{ book.field_zuozhe[0].value }}<br>
+                </span>
+               
+                <strong>语  言:</strong>
+                <span >
+                    {{ book.field_yuzhong[0].value }}<br>
+              
+                </span>
+
+                <strong>出版社:</strong>
+                <span >
+                    {{ book.field_chubanshe[0].value }}<br>
+                </span>
+                <strong>开  本:</strong>
+                <span >
+                    {{book.field_kaiben[0].value }}
+                </span>
+            </div>
+           
+        </div>
+    </div>
+
+</template>
+
+<template id="single-book-template">
+     <div class="single-book" v-show="book">
+         <h1>图书详细</h1>
+         <a class="btn btn-danger" v-on:click="getBooks">列表</a>
+        <div class="book-item" v-for="bookItem in book">
+            <h2>{{ bookItem.title[0].value }}</h2>
+            {{{ bookItem.body[0].value }}}
+        </div>
+    </div>
+    
+</template>
+
+
+<script type="text/javascript" src="js/vue.js"></script>
+<script type="text/javascript" src="js/vue-resource.js"></script>
+<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="js/vue-router.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
+</body>
+</html>

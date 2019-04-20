@@ -1,0 +1,39 @@
+
+img{
+	height: 140px;
+	width: 100px;
+	
+}
+
+div{
+
+	border:1px;
+}
+
+.list-block .item-content {
+	padding-left: 5px;
+}
+.bk_img1{
+	margin-bottom:5px;
+	margin-top:10px;
+	clear:both;
+	width:200px;
+	float: left;
+	border-bottom:0px solid #eee;
+}
+
+.bk_desc1{
+	float: left;
+	width:400px;
+	border:0px solid #eee;
+	font-size: 10pt;
+	margin-top:5px;
+
+}
+
+.bk_content11{
+	width: 400px;
+	margin:30px 15px;
+	clear:both;
+}
+/*# sourceMappingURL=style.css.map */

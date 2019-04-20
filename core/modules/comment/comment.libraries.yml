@@ -1,0 +1,6 @@
+drupal.comment:
+  version: VERSION
+  js:
+    comment-entity-form.js: {}
+
+    

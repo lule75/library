@@ -1,0 +1,33 @@
+{% include directory ~ '/partials/header_front.html.twig' %}
+
+<div class="container-header">
+
+  <main1 role="main">
+
+  <!--
+    <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
+  --> 
+
+
+    <div class="layout-content-front">
+        <div class="recommend-books">     
+          {{ page.recommend_books }}
+        </div>
+        <div class="latest-books">     
+          {{ page.latest_books }}
+        </div>
+        <div class="viewall-button">
+          <a href="booklist" class="large button">  &nbsp; &nbsp;查阅全部图书&nbsp; &nbsp; </a>
+        </div>
+    </div>{# /.layout-content #}
+
+  
+
+  </main1>
+
+
+</div>{# /.layout-container #}
+
+{% include directory ~ '/partials/footer.html.twig' %}
+
+

@@ -1,0 +1,56 @@
+
+img{
+	height: 140px;
+	width: 100px;
+	
+}
+
+div{
+
+	border:1px;
+}
+.content-block{
+	margin: 20px 0;
+}
+.list-block .item-content {
+	padding-left: 5px;
+}
+.bk_img1{
+	margin-bottom:5px;
+	margin-top:10px;
+	clear:both;
+	width:200px;
+	float: left;
+	border-bottom:0px solid #eee;
+}
+
+.bk_desc1{
+	float: left;
+	width:400px;
+	border:0px solid #eee;
+	font-size: 10pt;
+	margin-top:5px;
+
+}
+
+.bk_content11{
+	width: 400px;
+	margin:30px 15px;
+	clear:both;
+}
+
+ .demo-card-header-pic .card-header {
+ 
+    height: 40vw;
+    background-size: cover;
+    background-position: center;
+  
+  }
+  
+  .demo-card-header-pic > center >img{
+  	height: 180px;
+	width: 140px;
+	margin-top:15px;
+  }
+
+/*# sourceMappingURL=style.css.map */

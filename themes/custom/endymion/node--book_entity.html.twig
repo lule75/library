@@ -1,0 +1,76 @@
+
+<article{{ attributes.addClass('node') }}>
+<div class= "book-entity-page">
+
+
+      <div class= "book-entity-top">
+
+             <div class= "book-entity-image">
+                {{content.field_fengmian}}
+             </div>
+
+             <div class= "book-entity-name">
+                {{content.field_shuming}}
+             </div>
+             <div class= "book-entity-zuozhe">
+                {{content.field_zuozhe}}
+             </div>
+              <div class= "book-entity-yizhe">
+                {{content.field_yizhe}}
+             </div>
+             <div class= "book-entity-chubanshe">
+                {{content.field_shuma}}
+             </div>     
+
+             <div class= "book-entity-fenlei">
+                {{content.field_fenlei}}
+             </div>
+             
+               <div class= "book-entity-yuzhong">
+                {{content.field_yuzhong}}
+             </div>
+
+               <div class= "book-entity-kaiben">
+                {{content.field_kaiben}}
+             </div>
+
+              <div class= "book-entity-chubanshe">
+                {{content.field_chubanshe}}
+             </div>
+
+              <div class= "book-entity-chubanshe">
+                {{content.field_weizhi}}
+             </div>    
+             
+      </div>
+
+
+      <div class= "book-entity-body">
+
+          <ul class="tabs" data-tabs id="book-tabs">
+            <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">简介</a></li>
+            <li class="tabs-title"><a href="#panel2">目录</a></li>
+             <li class="tabs-title"><a href="#panel3">评论</a></li>
+         
+          </ul>
+
+        <div class="tabs-content" data-tabs-content="book-tabs">
+            <div class="tabs-panel is-active" id="panel1">
+              {{content.body}}
+            </div>
+            <div class="tabs-panel" id="panel2">
+              {{content.field_mulu}}
+            </div>  
+
+            <div class="tabs-panel" id="panel3">
+              {{content.field_pinglun}}
+            </div>  
+
+            
+        </div>
+    </div>
+</div>
+
+
+
+</article><!-- /.node -->

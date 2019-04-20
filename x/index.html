@@ -1,0 +1,548 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <!-- 
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+	  -->
+ 
+    <meta http-equiv="Content-Security-Policy" content="image-src * ;default-src * ; style-src * 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+  
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->    
+    <title>Book App</title>
+    <!-- Path to Framework7 Library CSS-->
+    <link rel="stylesheet" href="css/framework7.ios.min.css">
+    <link rel="stylesheet" href="css/framework7.ios.colors.min.css">
+
+    <!-- Path to your custom app styles-->
+    <link rel="stylesheet" href="css/my-app.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/iconfont.css">
+  
+ <!--   <link href="https://fonts.googleapis.com/icon?family=Material+Icons"  rel="stylesheet"> -->
+
+</head>
+
+ <body class="theme-black">   
+ 	 <!-- Start Views --> 
+    <div class="views">
+		    <!-- Start Your main view -->
+		    <div class="view view-main">
+					      <!-- Start Pages -->
+					      <div class="pages">
+					         
+									<!-- Start Router container -->
+								     <div class="container" id="app">                  
+								          <router-view></router-view>
+								     </div>
+					    			 <!-- End Router container -->
+					       </div>
+					       <!-- End Pages -->
+		   
+		   </div>    
+		    <!-- End Your main view -->   
+	</div>
+	<!-- End Views --> 
+	
+	<template id="home-template">
+	
+			
+		<div class="page" data-page="home">
+	          <div class="page-content" style="background:#EEE">
+	             <div class="content-block ">
+	             		<div style="text-align:center; margin-top:110px;">
+	             			<h1 style="font-size:35px" >GCRC Library</h1>
+	             			<span style="font-size:20px;">释放文字的力量</span><br>
+	             			<span style="font-size:13px;font-style:italic;">让阅读伴随你不断地归正</span>
+	             		</div>
+	             		
+			          <div style="margin:100px 40px 50px 40px">
+			           <a v-link="{ name: 'books'}" class="item-link item-content button button-big button-round">查阅书籍</a>
+			          
+							<br>
+							<a target="_blank" href="javascript:scan();" class="button button-big button-round">借书流程</a>			
+							
+							
+					  </div>
+				</div>
+					
+			        
+	          </div>
+	    </div>
+	</template>
+	
+	
+   <!-- book list template -->
+	<template id="book-list-template">  
+	
+	
+	
+  
+        <div class="page" data-page="home">
+         <div class="navbar fixed">
+			    <div class="navbar-inner">
+			        <div class="left">
+			       
+			               <a v-link="{ name: 'home'}"  class="link icon-only">  <i class="icon iconfont">&#xe631;</i></a>    
+			           
+			           
+			        </div>
+			        <div class="center">列表</div>
+			          <div class="right">        					
+			           		<a href="javascript:sync()" class="item-link item-content icon-only">
+			           	
+			           		  </a>
+						</div>
+			       
+			    </div>
+			</div>    
+         
+         
+          <div class="page-content">
+          
+		    
+		
+		
+
+					 <div class="book-list" v-show="books">
+					  <div class= "center" style="margin-top:44px;"></div>
+					  
+					  
+					 
+									           <form class="searchbar">
+									              <div class="searchbar-input">	                 
+									                  <input placeholder="请输入书名/作者/出版社 搜索" type="search"  v-model="titleFilter">
+									                  <a href="#" class="searchbar-clear"></a>
+									              </div>
+									              <a href="#" class="searchbar-cancel">Cancel</a>
+									           </form> 
+									         <div class="list-block" style="margin:0px">
+  													<ul>
+									          			<!-- Select -->
+													    <li>
+													      <div class="item-content">													      
+													        <div class="item-inner">			
+													        	<div Style="margin:0 5px;font-size:15px;width:100px;">分类检索</div>									         
+													          <div class="item-input" >
+													           <select v-model="typeFilter"  class="form-controll item-subtitle"  Style="margin:0 5px;font-size:15px;width:200px;">
+												                  <option value="">全部</option>
+												                   <option v-for="type in types" value="{{type.tid[0].value}}">{{type.name[0].value}}</option>
+												                </select>
+													          </div>
+													        </div>
+													      </div>
+   														</li>
+									         		</ul>
+									         </div>
+									         
+									      			
+									
+											        <div class="list-block media-list" style="margin:0px">
+											      
+											         <ul>	
+											            <div v-for="book in books | filterBy titleFilter in 'title' 'field_zuozhe'  'field_chubanshe'|  filterBy typeFilter in 'field_fenlei[0].target_id' " >
+											                <li class="item-content item-link">
+											                 <a v-link="{ name: 'book', params:{bookId:book.nid[0].value}}" class="item-link item-content">
+											                          <div class="item-media">
+											                                <img v-bind:src="book.field_fengmian[0].url" alt="{{ book.field_fengmian[0].alt }}">                                
+											                          </div>
+											                         
+											                           <div class="item-inner">
+											                              <div class="item-subtitle">  {{ book.title[0].value }}</div><br>
+											                              <div class="item-subtitle">作  者:{{ book.field_zuozhe[0].value }}</div>
+											                              <div class="item-subtitle">语  言:{{ book.field_yuzhong[0].value }}</div>
+											                              <div class="item-subtitle">出版社:{{ book.field_chubanshe[0].value }}</div>
+											                              <div class="item-subtitle">开  本:{{book.field_kaiben[0].value }}</div>                            
+											                          </div>                     
+											                  </a>
+											                </li>
+											              </div>	
+											         </ul>
+											      </div>
+					</div>
+	    
+           	
+          </div>
+        </div>
+      </div>
+  
+	
+	
+	
+	
+
+	   
+	</template>
+
+	<template id="single-book-template">
+	  	<div class="navbar fixed">
+			    <div class="navbar-inner left">
+			        <div class="left">
+			         	<a v-link="{ name: 'books'}"  class="link icon-only"> <i class="icon iconfont">&#xe631;</i></a>    
+			        </div>
+			        <div class="left">{{ book[0].title[0].value }}</div>
+			        <div class="right">
+			            <a href="#" class="link">
+			     
+			            </a>
+			        </div>
+			    </div>
+			</div>    
+			
+		<div class="page layout-white with-subnavbar" data-page="home">
+	          <div class="page-content">
+	          
+	          
+			
+			
+			        <div class="single-book" v-show="book" >          
+			            
+			             <div class="content-block">
+			             <br>
+			                 <div class="book-item" v-for="bookItem in book">
+ 
+										<div class="card demo-card-header-pic">
+										 
+										  <center>
+										   <img v-bind:src="bookItem.field_fengmian[0].url" alt="{{ bookItem.field_fengmian[0].alt }}">  
+										    <div class="card-content">
+										    <div class="card-content-inner">
+										      <p class="color-gray">{{  bookItem.field_zuozhe[0].value }}</p>
+										      <p></p>
+										    </div>
+										  </div>
+										  </center>
+									</div>
+			                 
+			                 <div class="content-block">
+
+	    <!-- Buttons row as tabs controller -->
+	    <div class="buttons-row">
+	      <!-- Link to 1st tab, active -->
+	      <a href="#tab1" class="tab-link color-orange active button">简介</a>
+	      <!-- Link to 2nd tab -->
+	      <a href="#tab2" class="tab-link color-orange button">目录</a>
+	    
+	      <a href="#tab3" class="tab-link color-orange button">评论</a>
+	        <!-- Link to 3rd tab 
+	      -->
+	    </div>
+	  </div>
+	  
+	  
+	 <div class="tabs-animated-wrap">
+	  
+	  <!-- Tabs, tabs wrapper -->
+	  <div class="tabs">
+	    <!-- Tab 1, active by default -->
+	    <div id="tab1" class="tab active">
+	      <div class="content-block">
+	      
+		      <p class="color-gray"><bold>书名：</bold> {{  bookItem.field_shuming[0].value }}<br>
+			    
+			       <bold>书码：</bold> {{  bookItem.field_shuma[0].value }}<br>
+			       <bold>作者：</bold>{{  bookItem.field_zuozhe[0].value }}<br>
+			       <bold>译者：</bold>{{  bookItem.field_yizhe[0].value }}<br>
+			       <bold>出版：</bold>{{  bookItem.field_chubanshe[0].value }}<br>
+			       <bold>位置：</bold>{{  bookItem.field_weizhi[0].value }}<br></p>
+			      <p></p>
+								 
+	         {{{ bookItem.body[0].value }}}
+	      </div>
+	    </div>
+	    <!-- Tab 2 -->
+	    <div id="tab2" class="tab">
+	      <div class="content-block">
+	        {{{ bookItem.field_mulu[0].value }}}
+	      </div>
+	    </div>
+	    
+	    <div id="tab3" class="tab" v-show="comments">
+	      <div class="content-block" v-for="comment in comments">
+	          {{{ comment.field_pinglun }}}
+	      </div>
+	    </div>
+
+
+	    
+	   <!--  -->
+	  
+	  </div>
+	  
+	   </div>
+			                 
+			                 
+			                 
+			             
+			                 
+			              
+    
+    
+    
+			                  
+			                   
+			                </div>
+			             </div>
+			         </div>
+	          </div>
+	    </div>
+	</template>
+	
+	
+	<template id="single-copy-template">
+	  	<div class="navbar fixed">
+			    <div class="navbar-inner">
+			        <div class="left">
+			         	<a v-link="{ name: 'home'}"  class="link icon-only"> <i class="icon icon-back"></i></a>    
+			        </div>
+			        <div class="left">借书页面</div>
+			        <div class="right">
+			            <a href="#" class="link">
+			     
+			            </a>
+			        </div>
+			    </div>
+			</div>    
+			
+		<div class="page layout-white with-subnavbar" data-page="home">
+	          <div class="page-content">
+	          
+	          
+			
+			
+			        <div class="single-copy" v-show="copy" >          
+			            
+			             <div class="content-block">
+			             <br>
+			                 <div class="copy-item" v-for="copyItem in copy">
+			                 
+			                 	
+ 
+										<div class="card demo-card-header-pic">										 
+										  <center>
+										    <img v-bind:src="copyItem.uri">  
+										    <div class="card-content">
+										    <div class="card-content-inner">
+										      <p class="color-gray">{{  copyItem.author }}</p>
+										    
+										    </div>
+										  </div>
+										  </center>				 
+										
+										</div>
+			                 
+			                 
+			                 
+			                 <div class="content-block">
+							             <div class="center" v-show="copyItem.weight==1">
+				  						  <p>
+				  						  	 <a v-link="{ name: 'create'}" class="item-link item-content button button-fill button-big color-green">借书</a>
+				  						  </p>
+				 							
+										</div>
+										
+										 <div class="center" v-show="copyItem.weight!=1">
+				  						  <p><a href="#" class="button button-fill button-big color-yellow">还书</a></p>
+				
+										</div>
+			                </div>
+			            
+							             <div class="content-block-title">书籍信息</div>
+										    <!-- This block will be inset only on tablets -->
+										    <div class="content-block tablet-inset">
+										      <div class="content-block-inner">
+										         										 <p>  {{ copyItem.name }}</p><br>
+															                              <p>作  者: {{ copyItem.author }}</p>
+															                              <p>语  言: {{ copyItem.field_yuyan }}</p>
+															                              <p>出版社: {{ copyItem.field_chubanshe }}</p>
+															                              <p>分类: {{copyItem.field_fenlei }}</p>    
+										      </div>
+										    </div>
+										 
+										</div>
+			            
+			                 
+			                </div>
+			             </div>
+			         </div>
+	          </div>
+	    </div>
+	</template>
+     
+     
+     <template id="create-record-template">
+			            
+			            
+			          
+			   <div class="navbar fixed">
+			    <div class="navbar-inner">
+			        <div class="left">
+			         		<a v-link="{ name: 'copy'}"  class="link icon-only"> <i class="icon icon-close"></i>取消</a>    
+			        </div>
+			        <div class="left">借书记录</div>
+			        <div class="right">
+			            <a href="#" class="link">
+			     			确定
+			            </a>
+			        </div>
+			    </div>
+			</div>    
+			
+		<div class="page layout-white with-subnavbar" data-page="home">
+	          <div class="page-content">
+	            <div class="center"><br></div>
+					<div class="content-block-title">Labels and inputs</div>
+							<div class="list-block">
+							  <ul>
+							    <!-- Text inputs -->
+							    <li>
+							      <div class="item-content">
+							        <div class="item-inner">
+							          <div class="item-title label">借书人</div>
+							          <div class="item-input">
+							            <input type="text" placeholder="Your name" v-model="borrower">
+							          </div>
+							        </div>
+							      </div>
+							    </li>
+							     <li>
+							      <div class="item-content">
+							        <div class="item-inner">
+							          <div class="item-title label">图书</div>
+							          <div class="item-input">
+							            <input type="text" value="圣洁A" disabled = "disabled" >
+							            <input type="hidden"  v-model="copy_id">
+							          </div>
+							        </div>
+							      </div>
+							    </li>
+							  
+							 
+							 
+							 
+							    <!-- Date -->
+							    <li>
+							      <div class="item-content">
+							        <div class="item-inner">
+							          <div class="item-title label">借书日期</div>
+							          <div class="item-input">
+							            <input type="date" placeholder="Birth day" value="2014-04-30" disabled = "disabled">
+							          </div>
+							        </div>
+							      </div>
+							    </li>
+							      <!-- Date -->
+							    <li>
+							      <div class="item-content">
+							        <div class="item-inner">
+							          <div class="item-title label">截止还书日期</div>
+							          <div class="item-input">
+							            <input type="date" placeholder="Birth day" value="2014-05-30" disabled = "disabled">
+							          </div>
+							        </div>
+							      </div>
+							    </li>
+							 
+							  
+							  </ul>
+							</div>
+			        
+	          </div>
+	    </div>
+			                
+			            
+			       
+	       
+	  
+	</template> 
+      
+   
+    <template id="test-template" >
+    <div class="page">
+	    <div class="page-content">
+	  <div class="content-block">
+	  <p>helll</p>
+	    <!-- Buttons row as tabs controller -->
+	    <div class="buttons-row">
+	      <!-- Link to 1st tab, active -->
+	      <a href="#tab1" class="tab-link active button">Tab 1</a>
+	      <!-- Link to 2nd tab -->
+	      <a href="#tab2" class="tab-link button">Tab 2</a>
+	      <!-- Link to 3rd tab -->
+	      <a href="#tab3" class="tab-link button">Tab 3</a>
+	    </div>
+	  </div>
+	  <!-- Tabs, tabs wrapper -->
+	  <div class="tabs">
+	    <!-- Tab 1, active by default -->
+	    <div id="tab1" class="tab active">
+	      <div class="content-block">
+	        <p>This is tab 1 content</p>
+	        ...
+	      </div>
+	    </div>
+	    <!-- Tab 2 -->
+	    <div id="tab2" class="tab">
+	      <div class="content-block">
+	        <p>This is tab 2 content</p>
+	        ...
+	      </div>
+	    </div>
+	    <!-- Tab 3 -->
+	    <div id="tab3" class="tab">
+	      <div class="content-block">
+	        <p>This is tab 3 content</p>
+	        ...
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	
+	</div>
+    
+   </template>  
+ 
+      
+      
+      
+    
+    <!-- Path to Framework7 Library JS-->
+
+
+<script type="text/javascript" src="js/vue.js"></script>
+<script type="text/javascript" src="js/vue-resource.js"></script>
+<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="js/vue-router.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
+
+
+    <script type="text/javascript" src="js/framework7.min.js"></script>
+    <!-- Path to your app js-->
+    <script type="text/javascript" src="js/my-app.js"></script>
+   
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+</body>
+
+</html>

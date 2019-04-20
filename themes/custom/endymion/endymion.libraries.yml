@@ -1,0 +1,13 @@
+global-css:
+  css:
+    theme:
+      css/foundation.css: {}
+      css/style.css: {}
+
+global-js:
+  js:
+    js/foundation.js: {}
+    js/what-input.js: {}
+    js/main.js: {}
+  dependencies:
+    - core/jquery
